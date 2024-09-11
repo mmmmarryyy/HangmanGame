@@ -5,7 +5,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class HangmanGameSpec extends AnyFunSuite with PrivateMethodTester {
   private val testCategory = Category.Animals
-  private val (testWord, testHint) = testCategory.words(0)
+  private val (testWord, testHint) = testCategory.words.head
   private val testDifficulty = 10
   private val numberOfAttepmts = 15 - testDifficulty
 
@@ -43,15 +43,21 @@ class HangmanGameSpec extends AnyFunSuite with PrivateMethodTester {
       assert(testOutput.contains(printedHangman))
       assert(
         testOutput.contains(
-          s"Congratulations! You guessed it!\nThe hidden word: $testWord"
+          s"Congratulations! You guessed it!"
+        )
+      )
+      assert(
+        testOutput.contains(
+          s"The hidden word: $testWord"
         )
       )
       assert(
         testOutput
           .split("\n")
-          .groupBy(identity)
-          .mapValues(_.size)(
-            s"Remaining attempts: $numberOfAttepmts"
+          .count(str =>
+            str.contains(
+              s"Remaining attempts: $numberOfAttepmts"
+            )
           ) == testWord.toSeq.distinct.size + 1
       )
 
@@ -64,23 +70,21 @@ class HangmanGameSpec extends AnyFunSuite with PrivateMethodTester {
       statesList.drop(1).zipWithIndex.foreach { elem =>
         if (elem._2 == 0) {
           assert(
-            elem._1 == "_" * testWord.size
+            elem._1.count(c => c == '_') == testWord.length
           ) // assert that initial state is something like ______
         } else {
-          val str = testWord.toList.map { c =>
+          // assert for each state that it is correct
+          testWord.toList.zipWithIndex.foreach { c =>
             if (
               testInputString.toLowerCase
                 .split("\n")
                 .toList
-                .indexOf(c.toString) <= elem._2
+                .indexOf(c._1.toString) <= elem._2
             )
-              c
+              assert(elem._1(c._2) == c._1)
             else
-              '_'
-          }.mkString
-          assert(
-            str == elem._1
-          ) // assert correctness of states with each new word
+              assert(elem._1(c._2) == '_')
+          }
         }
       }
     }
@@ -100,7 +104,7 @@ class HangmanGameSpec extends AnyFunSuite with PrivateMethodTester {
         testWord.contains(c)
       )(0)
 
-      val testInputString = s"$wrongLetter\n" * (numberOfAttepmts)
+      val testInputString = s"$wrongLetter\n" * numberOfAttepmts
 
       val testOutput = captureOutput {
         Console.withIn(
@@ -126,9 +130,10 @@ class HangmanGameSpec extends AnyFunSuite with PrivateMethodTester {
       assert(
         testOutput
           .split("\n")
-          .groupBy(identity)
-          .mapValues(_.size)(
-            "Current word state: " + "_" * testWord.size
+          .count(str =>
+            str.contains(
+              "Current word state: " + "_" * testWord.length
+            )
           ) == numberOfAttepmts
       )
     }
