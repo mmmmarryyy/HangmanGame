@@ -4,7 +4,9 @@ import scala.util.Random
 
 class WordChoosingUtils {
   def getDifficultyInput(): Int =
-    println("Enter the game difficulty (number from 5 to 10, press Enter for random difficulty):")
+    println(
+      "Enter the game difficulty (number from 5 to 10, press Enter for random difficulty):"
+    )
 
     val input = scala.io.StdIn.readLine()
 
@@ -51,7 +53,9 @@ class WordChoosingUtils {
         if (categoryIndex >= 0 && categoryIndex < Category.values.length) {
           Category.values(categoryIndex)
         } else {
-          println("Invalid input. Please enter a number between 0 and " + (Category.values.length - 1) + ".")
+          println(
+            "Invalid input. Please enter a number between 0 and " + (Category.values.length - 1) + "."
+          )
 
           getCategoryInput()
         }

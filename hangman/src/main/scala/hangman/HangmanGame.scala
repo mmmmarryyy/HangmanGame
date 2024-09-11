@@ -8,20 +8,33 @@ object HangmanGame {
 
   private sealed trait GuessResult
 
-  private case class Correct(remainingAttempts: Int, wordState: String) extends GuessResult
+  private case class Correct(remainingAttempts: Int, wordState: String)
+      extends GuessResult
 
-  private case class Incorrect(remainingAttempts: Int, wordState: String) extends GuessResult
+  private case class Incorrect(remainingAttempts: Int, wordState: String)
+      extends GuessResult
 
-  private case class Game(word: String, wordState: String, remainingAttempts: Int, maxAttempts: Int, hint: String)
+  private case class Game(
+      word: String,
+      wordState: String,
+      remainingAttempts: Int,
+      maxAttempts: Int,
+      hint: String
+  )
 
   private val hangmanDisplay = HangmanDisplayUtils()
   private val wordChoosingHelper = WordChoosingUtils()
 
-  def startGame(wordChoose: (String, String) = wordChoosingHelper.chooseWord(wordChoosingHelper.getCategoryInput()), difficulty: Int = wordChoosingHelper.getDifficultyInput()) = {
+  def startGame(
+      wordChoose: (String, String) =
+        wordChoosingHelper.chooseWord(wordChoosingHelper.getCategoryInput()),
+      difficulty: Int = wordChoosingHelper.getDifficultyInput()
+  ) = {
     val (chosenWord, hint) = wordChoose
     val initialWordState = "_" * chosenWord.length
 
-    val game = Game(chosenWord, initialWordState, 15 - difficulty, 15 - difficulty, hint)
+    val game =
+      Game(chosenWord, initialWordState, 15 - difficulty, 15 - difficulty, hint)
     val gameResult = playGame(game)
 
     gameResult match {
@@ -53,13 +66,23 @@ object HangmanGame {
             if (wordState == game.word) {
               GameResult.Won
             } else {
-              playGame(game.copy(remainingAttempts = remainingAttempts, wordState = wordState))
+              playGame(
+                game.copy(
+                  remainingAttempts = remainingAttempts,
+                  wordState = wordState
+                )
+              )
             }
           case Incorrect(remainingAttempts, wordState) =>
             if (remainingAttempts == 0) {
               GameResult.Lost
             } else {
-              playGame(game.copy(remainingAttempts = remainingAttempts, wordState = wordState))
+              playGame(
+                game.copy(
+                  remainingAttempts = remainingAttempts,
+                  wordState = wordState
+                )
+              )
             }
         }
     }
@@ -67,10 +90,13 @@ object HangmanGame {
 
   private def guessResult(game: Game, guess: String): GuessResult = {
     if (game.word.contains(guess)) {
-      val newWordState = game.word.zip(game.wordState).map {
-        case (letter, state) if letter == guess.charAt(0) => letter
-        case (_, state) => state
-      }.mkString
+      val newWordState = game.word
+        .zip(game.wordState)
+        .map {
+          case (letter, state) if letter == guess.charAt(0) => letter
+          case (_, state)                                   => state
+        }
+        .mkString
 
       Correct(game.remainingAttempts, newWordState)
     } else {
@@ -84,7 +110,10 @@ object HangmanGame {
 
     val input = scala.io.StdIn.readLine().toLowerCase
 
-    if ((input.length != 1 && input != "hint") || (input.length == 1 && !input.matches("[a-z]"))) {
+    if (
+      (input.length != 1 && input != "hint") || (input.length == 1 && !input
+        .matches("[a-z]"))
+    ) {
       println("Incorrect input. Please enter one letter.")
       getGuess()
     } else {

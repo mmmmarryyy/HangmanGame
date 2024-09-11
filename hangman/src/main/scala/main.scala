@@ -1,4 +1,4 @@
-import hangman. HangmanGame
+import hangman.HangmanGame
 
 @main
 def main(): Unit = HangmanGame.startGame()

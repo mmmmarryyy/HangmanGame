@@ -114,6 +114,8 @@ class HangmanDisplayUtils {
           |
           |""".stripMargin
       case _ =>
-        throw new IllegalArgumentException("Invalid attempts count: " + attempts)
+        throw new IllegalArgumentException(
+          "Invalid attempts count: " + attempts
+        )
     })
 }

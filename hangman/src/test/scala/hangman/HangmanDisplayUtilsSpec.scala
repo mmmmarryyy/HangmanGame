@@ -150,21 +150,29 @@ class HangmanDisplayUtilsSpec extends AnyFunSuite with Matchers {
         |""".stripMargin
   }
 
-  test("printHangman method should print same hangman for attempts more than 10") {
-    Array.range(10, 40).foreach(elem =>
-      captureOutput {
-        HangmanDisplayUtils().printHangman(elem)
-      } shouldEqual captureOutput {
-        HangmanDisplayUtils().printHangman(elem + 1)
-      }
-    )
+  test(
+    "printHangman method should print same hangman for attempts more than 10"
+  ) {
+    Array
+      .range(10, 40)
+      .foreach(elem =>
+        captureOutput {
+          HangmanDisplayUtils().printHangman(elem)
+        } shouldEqual captureOutput {
+          HangmanDisplayUtils().printHangman(elem + 1)
+        }
+      )
   }
 
-  test("printHangman method should throw IllegalArgumentException for invalid attempts count") {
-    Array.range(-40, 0).foreach(elem =>
-      intercept[IllegalArgumentException] {
-        HangmanDisplayUtils().printHangman(elem)
-      }
-    )
+  test(
+    "printHangman method should throw IllegalArgumentException for invalid attempts count"
+  ) {
+    Array
+      .range(-40, 0)
+      .foreach(elem =>
+        intercept[IllegalArgumentException] {
+          HangmanDisplayUtils().printHangman(elem)
+        }
+      )
   }
 }
