@@ -2,22 +2,22 @@ package hangman
 
 import scala.util.Random
 
-class WordChoosingUtils {
+class WordChoosingUtils { // <- так как все методы внутри статичные, можно было в object сделать
   def getDifficultyInput(): Int =
     println(
       "Enter the game difficulty (number from 5 to 10, press Enter for random difficulty):"
     )
 
-    val input = scala.io.StdIn.readLine()
+    val input = scala.io.StdIn.readLine() // <- я бы чтение из консоли вывел на уровень выше, в саму игру, а тут бы на вход получал Option[Int] со значением сложности, это также поможет проще тестировать функциональность, потому что метод, который не принимает значения, сложно оттестировать
 
     if (input.isEmpty) {
       val randomDifficult = Random.nextInt(6) + 5
-      println(s"Randomly choose difficult $randomDifficult")
+      println(s"Randomly choose difficult $randomDifficult") // <- сейчас норм, но в будущем я бы не советовал так делать, лучше реализовать отдельную сущность, где ты будешь указывать, что печатать. Это спасет в тех случаях, когда возникнет кейс поменять выводимый текст, чтобы не искать по всему коду все точки, они будут собраны в одном месте
 
       randomDifficult
     } else {
       try {
-        val difficulty = input.toInt
+        val difficulty = input.toInt // <- чтобы избежать проверки на ошибку, лучше вызвать input.toIntOption
 
         if (difficulty >= 5 && difficulty <= 10) {
           difficulty
@@ -32,7 +32,7 @@ class WordChoosingUtils {
       }
     }
 
-  def getCategoryInput(): Category = {
+  def getCategoryInput(): Category = { // <- аналогичные комментарии, как к методу выше
     println("Select a category (press Enter for random category):")
 
     Category.values.zipWithIndex.foreach { case (category, i) =>

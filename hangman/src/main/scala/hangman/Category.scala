@@ -1,8 +1,8 @@
 package hangman
 
-enum Category(val words: List[(String, String)]):
+enum Category(val words: List[(String, String)]): // <- String тайпинг не особо хороший подход, я бы вместо тапла (String, String) использовал бы какой-нибудь кейс класс, либо тайп алиас хотя бы, но опционально
   case Animals
-      extends Category(
+      extends Category( // <- с таким подходом ты как будто зашиваешь значения в категорию, это ок тут, но если надо будет масштабироваться или изменять/добавлять данные, то такой подход не лучшая идея, можно оставить енум с категориями, а саму принадлежность к категориям вынести в отдельную сущность
         List(
           ("cat", "A pet that loves to catch mice"),
           ("dog", "A faithful friend of man"),

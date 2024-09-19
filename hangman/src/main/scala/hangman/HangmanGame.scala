@@ -16,11 +16,11 @@ object HangmanGame {
 
   private case class Game(
       word: String,
-      wordState: String,
+      wordState: String, // <- Можно было пойти еще глуюже и сделать для стейта отдельный ADT по типу угадана буква или нет
       remainingAttempts: Int,
       maxAttempts: Int,
       hint: String
-  )
+  ) // <- ADT выше круто написано
 
   private val hangmanDisplay = HangmanDisplayUtils()
   private val wordChoosingHelper = WordChoosingUtils()
@@ -31,7 +31,7 @@ object HangmanGame {
       difficulty: Int = wordChoosingHelper.getDifficultyInput()
   ) = {
     val (chosenWord, hint) = wordChoose
-    val initialWordState = "_" * chosenWord.length
+    val initialWordState = "_" * chosenWord.length // <- я бы разделил отображение стейта в консоли и то, как он у нас хранится внутри игры
 
     val game =
       Game(chosenWord, initialWordState, 15 - difficulty, 15 - difficulty, hint)
@@ -93,7 +93,7 @@ object HangmanGame {
       val newWordState = game.word
         .zip(game.wordState)
         .map {
-          case (letter, state) if letter == guess.charAt(0) => letter
+          case (letter, state) if letter == guess.charAt(0) => letter // <- чтобы не делать каждый раз guess.charAt(0), лучше проверить выше, что там действительно один элемент и преобразовать его к Char
           case (_, state)                                   => state
         }
         .mkString

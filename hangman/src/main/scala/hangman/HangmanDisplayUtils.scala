@@ -1,7 +1,7 @@
 package hangman
 
-class HangmanDisplayUtils {
-  def printHangman(attempts: Int): Unit =
+class HangmanDisplayUtils { // <- написано круто :)
+  def printHangman(attempts: Int): Unit = // <- опционально, но вот тут я бы возвращал String и уже в месте, где надо печатать, вызывал print, а то вдруг по логике нам надо этот принт еще преобразовать как-то :)
     print(attempts match {
       case x if x > 9 =>
         """
